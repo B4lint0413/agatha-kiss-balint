@@ -28,7 +28,7 @@ class NovelController extends Controller
     }
 
     public function show($id){
-        $novel = DB::table("novels")->first("id", $id);
+        $novel = DB::table("novels")->where("id", $id)->first();
         return view("novel.show", [
             "title" => "Kiválasztott könyv adatai",
             "novel" => $novel
@@ -37,6 +37,6 @@ class NovelController extends Controller
 
     private function categories() : Collection{
         $builder = DB::table("novels");
-        return $builder->pluck("category")->distinct()->get();
+        return $builder->select("category")->distinct()->get();
     }
 }

@@ -9,12 +9,12 @@ class OrderController extends Controller
 {
     public function show($novelid){
         $orders = DB::table("orders")->where("novel_id", $novelid);
-        $novelTitle = DB::table("novels")->first("id", $novelid)->value('hungarian_title');
+        $novelTitle = DB::table("novels")->where("id", $novelid)->pluck("hungarian_title")->first();
         return view("order.show", [
             "title" => $novelTitle." című könyv rendelései",
             "orders" => $orders->get(),
-            "novelTitle" => $novelTitle,
-            "count" => $orders->count()
+            "novelid" => $novelid,
+            "count" => $orders->sum("piece"),
         ]);
     }
 }

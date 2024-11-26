@@ -8,7 +8,6 @@
   </head>
   <body>
     @include("layouts.menu")
-    <h1>Agatha Christie regények</h1>
     <main class="container">
         @yield("content")
     </main>

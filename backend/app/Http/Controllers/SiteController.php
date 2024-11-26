@@ -12,7 +12,7 @@ class SiteController extends Controller
     }
 
     public function oldestnovel(){
-        $oldest = DB::table("novels")->orderBy("date")->first();
+        $oldest = DB::table("novels")->orderBy("year")->first();
         return view("novel.show", [
             "title" => "Legrégebbi könyv adatai",
             "novel" => $oldest
@@ -31,7 +31,8 @@ class SiteController extends Controller
         $gyilkos = DB::table("novels")->where("hungarian_title", "like", "%gyilkos%")->orWhere("english_title", "like", "%murder%")->get();
         return view("novel.index", [
             "title" => "Gyilkos könyvek",
-            "novels" => $gyilkos
+            "novels" => $gyilkos,
+            "murder" => true
         ]);
     }
 
@@ -39,17 +40,18 @@ class SiteController extends Controller
         $fifties = DB::table("novels")->whereBetween("year", [1950, 1959])->get();
         return view("novel.index", [
             "title" => "1950-es évek regényei",
-            "novels" => $fifties
+            "novels" => $fifties,
+            "fifties" => true
         ]);
     }
     
     public function mostorders(){
         $most = DB::table("orders")->orderByDesc("piece")->first();
-        $novel = DB::table("novels")->first("id",$most["novel_id"]);
+        $novel = DB::table("novels")->where("id",$most->novel_id)->first();
         return view("novel.show", [
             "title" => "Legtöbb példányszámú rendelés",
             "novel" => $novel,
-            "themostorders" => $most["piece"]
+            "themostorders" => $most->piece
         ]);
     }
 }
